@@ -2,9 +2,8 @@ name: Daily Camp News Update
 
 on:
   schedule:
-    # 毎日日本時間の朝9:00（UTC 0:00）に自動実行
     - cron: '0 0 * * *'
-  workflow_dispatch: # 手動でも実行できるようにする
+  workflow_dispatch:
 
 jobs:
   update-news:
@@ -32,5 +31,5 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add articles.json camp_summary.html
-          git diff --quiet && git diff --staged --quiet || (git commit -m "Auto-update camp news" && git push)
+          git add articles.json index.html make_summary.py .github/workflows/update.yml
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Change output to index.html" && git push)

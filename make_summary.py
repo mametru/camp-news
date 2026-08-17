@@ -252,7 +252,7 @@ function filterCards(category, btn) {
 </body>
 </html>"""
 
-with open("camp_summary.html", "w", encoding="utf-8") as f:
+with open("index.html", "w", encoding="utf-8") as f:
     f.write(html_content)
     
 print("✨ メインビジュアルの日本語化が完了しました！")
