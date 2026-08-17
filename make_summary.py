@@ -172,6 +172,16 @@ total_count = len(all_articles)
 html_content = f"""<!DOCTYPE html>
 <html lang="ja">
 <head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-D9MG4MRBB5"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){{dataLayer.push(arguments);}}
+  gtag('js', new Date());
+
+  gtag('config', 'G-D9MG4MRBB5');
+</script>
+<meta name="google-site-verification" content="hBCTAgRhB0rpRLp1YYaR5p2yKLzPOer32cFWVVPL1rI" />
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>キャンプ・アウトドア最新情報まとめ</title>
@@ -267,4 +277,4 @@ function filterCards(category, btn) {
 with open("index.html", "w", encoding="utf-8") as f:
     f.write(html_content)
     
-print("✨ スマホ対応のレスポンシブ設定を完了し、index.html を生成しました！")
+print("✨ Googleサーチコンソール確認用タグの埋め込みが完了しました！")
