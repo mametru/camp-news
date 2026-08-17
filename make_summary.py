@@ -1,15 +1,21 @@
+import json
+import os
+from datetime import datetime
 import requests
 from bs4 import BeautifulSoup
-import json
-import datetime
 
-# --- ここにスクレイピング処理など、あなたの既存のコードが入ります ---
-# (既存のコードが長いため、この部分は元のスクリプトからコピーしてください)
-# 今回はデザイン更新のみに集中するため、HTML生成部分のみを以下のように定義します
+def scrape_camp_news():
+    articles = []
+    try:
+        if os.path.exists('articles.json'):
+            with open('articles.json', 'r', encoding='utf-8') as f:
+                articles = json.load(f)
+    except Exception as e:
+        print(f"Error loading articles: {e}")
+    return articles
 
 def generate_html(articles):
-    html_content = """
-<!DOCTYPE html>
+    html_content = """<!DOCTYPE html>
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
@@ -46,19 +52,35 @@ def generate_html(articles):
     <div class="card-container">
 """
     for article in articles:
+        title = article.get('title', 'タイトルなし')
+        url = article.get('url', '#')
+        date = article.get('date', '')
+        source = article.get('source', '')
         html_content += f"""
         <div class="card">
-            <a href="{article['url']}" target="_blank">
-                <h3>{article['title']}</h3>
-                <p>🕒 {article['date']} | 🌐 {article['source']}</p>
+            <a href="{url}" target="_blank">
+                <h3>{title}</h3>
+                <p>🕒 {date} | 🌐 {source}</p>
             </a>
         </div>
     """
     html_content += "</div></body></html>"
     return html_content
 
-# --- ここから下は、既存の処理と呼び出しを繋いでください ---
-# 例: 
-# articles = scrape_news()
-# with open("index.html", "w", encoding="utf-8") as f:
-#     f.write(generate_html(articles))
+if __name__ == "__main__":
+    articles = scrape_camp_news()
+    if not articles:
+        articles = [{
+            "title": "キャンプニュースダッシュボードへようこそ！",
+            "url": "https://mametru.github.io/camp-news/",
+            "date": datetime.now().strftime("%Y-%m-%d"),
+            "source": "System"
+        }]
+    
+    with open("articles.json", "w", encoding="utf-8") as f:
+        json.dump(articles, f, ensure_ascii=False, indent=2)
+        
+    html_out = generate_html(articles)
+    with open("index.html", "w", encoding="utf-8") as f:
+        f.write(html_out)
+    print("Successfully generated index.html and articles.json")
