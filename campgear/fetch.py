@@ -14,6 +14,9 @@ NS = {
 }
 
 
+_CONTROL_CHARS = re.compile(r"[\x00-\x08\x0b\x0c\x0e-\x1f\x7f\ufffe\uffff]")
+
+
 class FetchError(Exception):
     pass
 
@@ -62,6 +65,7 @@ def strip_html(text):
     except Exception:
         out = re.sub(r"<[^>]+>", " ", text)
     out = html.unescape(out)
+    out = _CONTROL_CHARS.sub("", out)  # XML(RSS)で使えない制御文字を除去
     return re.sub(r"\s+", " ", out).strip()
 
 

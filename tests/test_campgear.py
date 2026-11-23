@@ -77,6 +77,14 @@ class FeedTest(unittest.TestCase):
         entries = parse_feed(xml)
         self.assertEqual([e["title"] for e in entries], ["T1"])
 
+    def test_control_chars_removed(self):
+        xml = "<rss><channel><item><title>A\x01B</title><link>https://x.example/1</link></item></channel></rss>"
+        self.assertEqual(parse_feed(xml.encode())[0]["title"], "AB")
+
+    def test_rss_output_is_valid_xml(self):
+        import xml.etree.ElementTree as ET
+        ET.fromstring(render.rss(CFG, [make_item(title="<b>&\"'", summary="x")], "2026-11-23T00:00:00Z").encode())
+
     def test_safe_url(self):
         self.assertEqual(safe_url("https://a.example/x"), "https://a.example/x")
         self.assertEqual(safe_url("javascript:alert(1)"), "")
