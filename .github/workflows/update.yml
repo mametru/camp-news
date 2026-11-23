@@ -1,35 +1,54 @@
-name: Daily Camp News Update
+name: Update camp gear news
 
 on:
   schedule:
-    - cron: '0 0 * * *'
+    # 3時間ごと（毎時0分は混雑するため17分にずらす）。UTC表記
+    - cron: '17 */3 * * *'
   workflow_dispatch:
 
+# 同時実行による push 競合を防ぐ
+concurrency:
+  group: update-site
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
 jobs:
-  update-news:
+  update:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     permissions:
       contents: write
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
-          python-version: '3.10'
+          python-version: '3.12'
 
-      - name: Install dependencies
-        run: |
-          pip install requests beautifulsoup4
+      # 外部ライブラリは使わない（標準ライブラリのみ）ため pip install は不要
+      - name: Run tests
+        run: python -m unittest discover -s tests
 
-      - name: Run script
-        run: |
-          python make_summary.py
+      - name: Build site
+        id: build
+        run: python build.py
 
       - name: Commit and push changes
+        env:
+          ADDED: ${{ steps.build.outputs.added }}
         run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add articles.json index.html make_summary.py .github/workflows/update.yml
-          git diff --quiet && git diff --staged --quiet || (git commit -m "Change output to index.html" && git push)
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          # 記事データに変化がない回はコミットしない（更新時刻だけの差分でリポジトリを膨らませない）
+          if git diff --quiet -- data/ && [ -z "$(git ls-files --others --exclude-standard data/)" ]; then
+            echo "新しい記事なし"
+            exit 0
+          fi
+          git add data/ index.html category/ about.html privacy.html sitemap.xml robots.txt feed.xml .nojekyll
+          git commit -m "Update site: +${ADDED:-0} items ($(TZ=Asia/Tokyo date '+%Y-%m-%d %H:%M JST'))"
+          git pull --rebase origin "${GITHUB_REF_NAME}"
+          git push origin "HEAD:${GITHUB_REF_NAME}"

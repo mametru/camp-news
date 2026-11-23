@@ -1,0 +1,45 @@
+{
+  "site": {
+    "name": "キャンプギア新製品・セール速報",
+    "tagline": "キャンプ・アウトドアギアの新製品とセール情報を自動でまとめてお届け",
+    "base_url": "https://mametru.github.io/camp-news/",
+    "contact_url": "https://github.com/mametru/camp-news/issues",
+    "operator": "キャンプギア新製品・セール速報 運営者",
+    "google_site_verification": "hBCTAgRhB0rpRLp1YYaR5p2yKLzPOer32cFWVVPL1rI"
+  },
+  "analytics": {
+    "ga4_measurement_id": "G-D9MG4MRBB5"
+  },
+  "affiliate": {
+    "_comment": "IDを入れると記事カードに商品検索リンク（PR表記付き）が自動で表示されます。空なら非表示。",
+    "amazon_tag": "",
+    "rakuten_affiliate_id": ""
+  },
+  "fetch": {
+    "user_agent": "CampGearNewsBot/1.0",
+    "timeout_sec": 15,
+    "max_bytes": 5000000
+  },
+  "retention": {
+    "max_age_days": 90,
+    "max_items": 800
+  },
+  "sources": [
+    {"id": "bepal", "name": "BE-PAL", "type": "rss", "url": "https://www.bepal.net/feed", "trusted_new_category": "新着アイテム情報"},
+    {"id": "camphack", "name": "CAMP HACK", "type": "rss", "url": "https://camphack.nap-camp.com/feed"},
+    {"id": "prtimes", "name": "PR TIMES", "type": "rss", "url": "https://prtimes.jp/index.rdf"},
+    {"id": "gn_new_general", "name": "Googleニュース", "type": "google_news", "query": "キャンプギア 新製品"},
+    {"id": "gn_new_outdoor", "name": "Googleニュース", "type": "google_news", "query": "アウトドア 新作 発売"},
+    {"id": "gn_new_snowpeak", "name": "Googleニュース", "type": "google_news", "query": "スノーピーク 新製品"},
+    {"id": "gn_new_coleman", "name": "Googleニュース", "type": "google_news", "query": "コールマン 新作"},
+    {"id": "gn_new_dod", "name": "Googleニュース", "type": "google_news", "query": "DOD キャンプ 新商品"},
+    {"id": "gn_new_workman", "name": "Googleニュース", "type": "google_news", "query": "ワークマン キャンプ 新作"},
+    {"id": "gn_new_tent", "name": "Googleニュース", "type": "google_news", "query": "テント 新モデル 発売"},
+    {"id": "gn_new_prtimes", "name": "Googleニュース", "type": "google_news", "query": "キャンプ 新発売 site:prtimes.jp"},
+    {"id": "gn_sale_camp", "name": "Googleニュース", "type": "google_news", "query": "キャンプ用品 セール"},
+    {"id": "gn_sale_outdoor", "name": "Googleニュース", "type": "google_news", "query": "アウトドア セール OFF"},
+    {"id": "gn_sale_amazon", "name": "Googleニュース", "type": "google_news", "query": "Amazon キャンプギア セール"},
+    {"id": "gn_sale_rakuten", "name": "Googleニュース", "type": "google_news", "query": "楽天 アウトドア セール"},
+    {"id": "gn_sale_power", "name": "Googleニュース", "type": "google_news", "query": "ポータブル電源 セール"}
+  ]
+}
